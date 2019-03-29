@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+
+	<head >
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+			
+
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">个人中心</h1>
+		</header>
+		<div class="mui-content">
+			<button  class="btn btn-success btn-block" onclick="goods()">商品列表</button>
+			<button  class="btn btn-success btn-block" onclick="cart()">购物车列表</button>
+			<button  class="btn btn-success btn-block" onclick="order()">订单列表</button>
+			<button  class="btn btn-success btn-block" onclick="collection()">收藏列表</button>
+		</div>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script>
+		var self = plus.webview.currentWebview();
+				uid = self.uid;//获得参数	
+		function goods(){
+			var webview=mui.openWindow({
+				url:'goods.html',        
+				extras:{   
+					uid:uid 
+				},
+			})
+			
+		}
+		function cart(){
+			var webview=mui.openWindow({
+				url:'cart.html',        
+				extras:{   
+					uid:uid 
+				},
+			})
+		}
+		function order(){
+			//location.href="order.html";
+			var webview=mui.openWindow({
+				url:'order.html',        
+				extras:{   
+					uid:uid 
+				},
+			})
+		}
+		function collection(){
+			//location.href="order.html";
+			var webview=mui.openWindow({
+				url:'collection.html',        
+				extras:{   
+					uid:uid 
+				},
+			})
+		}
+	</script>
+
+</html>

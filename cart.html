@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+		
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">购物车列表</h1>
+		</header>
+		<div class="mui-content">
+			<button  id='hidden'  class="btn btn-success btn-block" onclick="cart()">购物车列表</button>
+			<table id='box' border="1">
+				
+			</table>
+
+		</div>
+	</body>
+
+	
+
+	<script src="js/mui.min.js"></script>
+	<script src="js/jquery-1.12.4.min.js"></script>
+	<script>
+	function cart(){
+		var self = plus.webview.currentWebview();
+			uid = self.uid;//获得参数
+			var _tr;
+			_tr+="<tr>"+
+					"<td>"+"商品ID"+"</td>"+
+					"<td>"+"商品名称"+"</td>"+
+					"<td>"+"商品数量"+"</td>"+
+					"<td>"+"商品价格"+"</td>"+
+					"<td>"+"时间"+"</td>"+
+					"<td>"+"操作"+"</td>"+
+				"</tr>"
+			mui.ajax({  
+					url: 'http://shop135.qianqianya.xyz/cart',  
+					data:{
+						uid:uid
+					},   
+					dataType: 'json',  
+					type: 'get',  
+					success:function(msg){
+							if(msg==''){
+								alert('购物车太空了');
+							}else{
+								$.each(msg,function(i,value){
+								_tr+=
+									"<tr>"+
+											"<td>"+value.cart_id+"</td>"+
+											"<td>"+value.cart_name+"</td>"+
+											"<td>"+value.cart_num+"</td>"+
+											"<td>"+value.cart_pirce+"</td>"+
+											"<td>"+value.add_time+"</td>"+
+											"<td>"+"<button class='btn btn-success btn-block' onclick='orderpay("+value.cart_id+")'>生成订单</button>"+"</td>"+
+										"</tr>";
+							})
+							//替换
+							$('#box').html(_tr)
+							$('#hidden').hide();
+						}
+							
+				}, 
+					error: function(data) {
+						alert(146); 
+						alert(data.msg); 
+					} 
+			});  
+		}
+		
+		function orderpay(cart_id){
+			mui.ajax({  
+					url: 'http://shop135.qianqianya.xyz/order',  
+					data:{
+						cart_id:cart_id,
+						uid:uid
+					},   
+					dataType: 'json',  
+					type: 'post',  
+					success:function(msg){
+						if(msg.errno==0){
+							alert(msg.msg)
+							//跳转页面
+							var webview=mui.openWindow({
+								url:'order.html',        
+								extras:{   
+									uid:uid 
+								},
+							})
+						}else{
+							alert(msg.msg)
+						}
+					
+				}, 
+					error: function(data) {
+						alert(146); 
+					} 
+			});  
+		}
+
+	</script>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+		
+	</head>
+	<body>
+		<input type="hidden" id='uid'>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">商品列表</h1>
+		</header>
+		<div class="mui-content">
+			<button   id='hidden' class="btn btn-success btn-block" onclick="goods()">查看所有商品</button>
+			
+			<table id='box' border="1">
+				
+			</table>
+		</div>
+		
+	</body>
+
+	
+
+	<script src="js/mui.min.js"></script>
+	<script src="js/jquery-1.12.4.min.js"></script>
+	<script>
+		var self = plus.webview.currentWebview();
+			uid = self.uid;//获得参数
+		function goods(){
+			
+			var _tr;
+			_tr+="<tr>"+
+					"<td>"+"商品ID"+"</td>"+
+					"<td>"+"商品名称"+"</td>"+
+					"<td>"+"商品价格"+"</td>"+
+					"<td>"+"时间"+"</td>"+
+					"<td>"+"操作"+"</td>"+
+				"</tr>"
+			mui.ajax({  
+					url: 'http://shop135.qianqianya.xyz/goods',  
+					data:aa=1 ,   
+					dataType: 'json',  
+					type: 'get',  
+					success:function(msg){
+					$.each(msg,function(i,value){
+						_tr+=
+							"<tr>"+
+									"<td>"+value.goods_id+"</td>"+
+									"<td>"+value.goods_name+"</td>"+
+									"<td>"+value.price+"</td>"+
+									"<td>"+value.created_at+"</td>"+
+									"<td>"+"<button class='btn btn-success btn-block'onclick='details("+value.goods_id+")'>查看详情</button>"+"</td>"+
+								"</tr>";
+					})
+					$('#hidden').hide();
+					$('#box').html(_tr)
+					
+				}, 
+					error: function(data) {
+						alert(146); 
+						
+					} 
+			});  
+		}
+		function collect(goods_id){
+			alert('请拭目以待')
+		}
+		function details(id){
+			var fign1=1;
+			var fign2=2;
+			var fign3=3;
+			var _tr;
+			_tr+="<tr>"+
+					"<td>"+"商品ID"+"</td>"+
+					"<td>"+"商品名称"+"</td>"+
+					"<td>"+"商品价格"+"</td>"+
+					"<td>"+"时间"+"</td>"+
+					"<td>"+"操作"+"</td>"+
+				"</tr>"
+			mui.ajax({  
+					url: 'http://shop135.qianqianya.xyz/goodsadd',  
+					data:{
+						id:id
+					},   
+					dataType: 'json',  
+					type: 'get',  
+					success:function(msg){
+					
+					$.each(msg,function(i,value){
+						_tr+=
+							"<tr>"+
+									"<td>"+value.goods_id+"</td>"+
+									"<td>"+value.goods_name+"</td>"+
+									"<td>"+value.price+"</td>"+
+									"<td>"+value.created_at+"</td>"+
+									"<td>"+"<button class='btn btn-success btn-block'onclick='cart("+value.goods_id+","+fign1+")'>点赞</button><button class='btn btn-success btn-block'onclick='cart("+value.goods_id+","+fign2+")'>收藏</button><button class='btn btn-success btn-block'onclick='cart("+value.goods_id+","+fign3+")'>添加购物车</button>"+"</td>"+
+								"</tr>";
+					})
+					$('#box').html(_tr)
+					
+				}, 
+					error: function(data) {
+						alert(146); 
+					} 
+			}); 
+		}
+		
+	function cart(id,fign){
+		
+			
+		if(fign==1){
+			//点赞
+			var fign='cartadd2';
+		}else if(fign==2){
+			
+			//收藏
+			var fign='cartadd3';
+		}else if(fign==3){
+			//购物车
+			var fign='cartadd';
+		}
+			mui.ajax({  
+					url: "http://shop135.qianqianya.xyz/"+fign,
+					data:{
+						id:id,
+						uid:uid
+					},   
+					dataType: 'json',  
+					type: 'get',  
+					success:function(msg){
+					if(msg.erron==2){
+						alert(msg.msg);
+					}else if(msg.errno==0){
+						alert(msg.msg)	
+						location.href="cart.html";
+					}else if(msg.erron==3){
+						alert(msg.msg)
+					}else if(msg.erron==522200){
+						alert(msg.msg)
+					}else if(msg.erron==522201){
+						alert(msg.msg)
+					}else if(msg.erron==50001){
+						alert(msg.msg)
+					}
+					
+				}, 
+					error: function(data) {
+						alert(146); 
+					} 
+			}); 
+		}
+	</script>
+</html>

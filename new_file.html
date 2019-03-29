@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+	</head>
+			<div class="form-group">
+
+    <label for="exampleInputName1">用户名</label>
+
+    <input type="text" class="form-control" id="exampleInputName1" placeholder="用户名" name="u_name">
+
+</div>
+
+<div class="form-group">
+
+    <label for="exampleInputPassword1">密码</label>
+
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="u_pwd">
+
+</div>
+
+<button class="btn btn-success btn-block" onclick="login()">登录</button>
+	<body>
+		<script src="js/mui.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			
+			 function login(){
+
+        //e.preventDefault();
+
+        var u_name = document.getElementById('exampleInputName1').value;
+
+        var u_pwd = document.getElementById('exampleInputPassword1').value;
+
+        //alert(u_pwd);
+
+        mui.ajax({
+
+            headers: {
+
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+            },
+
+            url: 'userlogin',
+
+            data: {u_name:u_name,u_pwd:u_pwd},
+
+            async: true, // 异步 || 同步
+
+            dataType: 'json',
+
+            type: 'post',
+
+            timeout: 10000,
+
+            success: function(data) {
+
+                // 请求成功
+
+                if(data.errno == 0){
+
+                    alert(data.msg);
+
+                    location.href = "{{$redirect}}";
+
+                }else{
+
+                    var msg = data.errno + ":" + data.msg;
+
+                    alert(msg);
+
+                }
+
+            },
+
+        });
+
+    }
+		</script>
+	</body>
+
+</html>
